@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="https://revcenter.ai/revcenter-logo.svg" alt="Revcenter" width="220">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://www.revcenter.ai/revcenter-logo-white.svg">
+    <img src="https://www.revcenter.ai/revcenter-logo.svg" alt="Revcenter" width="220">
+  </picture>
 </p>
 
 <p align="center"><strong>Recruit from your AI coding agent</strong>: skills, MCP tools and the <code>revcenter</code> CLI for Claude Code, Codex and Cursor.</p>
