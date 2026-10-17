@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "revcenter": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "revcenter@latest",
+        "mcp"
+      ]
+    }
+  }
+}

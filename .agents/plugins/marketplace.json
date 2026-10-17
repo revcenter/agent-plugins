@@ -1,0 +1,19 @@
+{
+  "name": "revcenter-plugins",
+  "interface": {
+    "displayName": "Revcenter"
+  },
+  "plugins": [
+    {
+      "name": "revcenter",
+      "source": {
+        "source": "local",
+        "path": "./revcenter"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      }
+    }
+  ]
+}

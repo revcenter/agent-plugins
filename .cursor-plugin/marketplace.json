@@ -1,0 +1,16 @@
+{
+  "name": "revcenter-plugins",
+  "owner": {
+    "name": "Revcenter"
+  },
+  "metadata": {
+    "description": "Official Revcenter plugins for Cursor"
+  },
+  "plugins": [
+    {
+      "name": "revcenter",
+      "source": "./revcenter",
+      "description": "Candidate search and shortlists from Cursor"
+    }
+  ]
+}

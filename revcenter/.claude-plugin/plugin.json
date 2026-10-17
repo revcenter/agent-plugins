@@ -1,0 +1,22 @@
+{
+  "name": "revcenter",
+  "description": "Candidate search and shortlists from Claude Code",
+  "version": "0.4.0",
+  "author": {
+    "name": "Revcenter"
+  },
+  "homepage": "https://docs.revcenter.ai",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/check-cli.sh\" claude",
+            "timeout": 6
+          }
+        ]
+      }
+    ]
+  }
+}

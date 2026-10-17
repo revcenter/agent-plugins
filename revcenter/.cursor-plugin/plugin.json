@@ -1,0 +1,12 @@
+{
+  "name": "revcenter",
+  "version": "0.4.0",
+  "description": "Candidate search and shortlists from Cursor",
+  "author": {
+    "name": "Revcenter"
+  },
+  "skills": [
+    "./skills"
+  ],
+  "hooks": "./hooks/cursor-hooks.json"
+}
