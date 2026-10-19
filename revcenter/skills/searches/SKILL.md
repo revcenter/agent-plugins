@@ -1,6 +1,6 @@
 ---
 name: searches
-description: Run Revcenter candidate searches — draft criteria for a role, launch a search (reserves up to 1,000 credits by default), wait for it, and report who scored 80+. Use for "find me candidates for…", "source a…", "run a search", or several roles at once (one sub-agent per role).
+description: Run Revcenter candidate searches — draft criteria for a role, launch a search (reserves up to 1,000 credits by default), wait for it, and report who scored 80+. Use for "find me candidates for…", "source a…", "run a search", or several roles at once (one launch_searches call, then one sub-agent per search).
 ---
 
 # Searches
@@ -98,10 +98,32 @@ All free. A database-only search has no records. No contact details.
 
 ## Several roles at once
 
-There's no limit on searches running together, only credits. For several roles, confirm all the
-criteria with the user first (each reserves its own cap, 1,000 credits by default), then run one sub-agent per role, each doing steps
-2 and 3 for its role. When all are done, gather a summary table (role, people found, shortlisted)
-and export each shortlist (shortlists skill).
+There's no limit on searches running together, only credits. For several roles (a batch of client
+requests, an inbox triage):
+
+1. Draft every role's criteria and confirm them all with the user in one table (each reserves its
+   own cap, 1,000 credits by default).
+2. Make the projects (`create_project`, one per role).
+3. Launch them all in **one** call, so the user approves once:
+   - MCP: `launch_searches` with `launches: [{project_id, criteria, max_credits?}, ...]` (up to 25).
+     One prompt lists every search and the total; one Accept launches them all side by side. Each
+     comes back with its `outcome`: `launched` (with `search.search_id`), `declined`,
+     `pending_approval` (show it, then `apply_proposal` with its `proposal_id`) or `failed` (fix
+     what the error says and call `launch_searches` again with just those; a launch that already
+     ran comes back, never paid twice).
+   - CLI: write the list to a file and run `revcenter launch batch.json` (add `--wait` to wait for
+     all of them). Each line of the output has its `outcome`; the exit code is non-zero if any failed.
+4. Then fan out: one sub-agent per launched search, each doing `wait_for_search` and step 3 for its
+   role (and whatever follows, like drafting the client's reply). Sub-agents can run in parallel.
+   For a reply to the client, take the project's link from `get_share_link` (CLI:
+   `revcenter share <project_id>`) and paste its `url` into the draft. It is the same link every
+   time and shows the live shortlist, so take off anyone who shouldn't be seen first
+   (`remove_shortlist_member`), and don't send it while `shortlisted` is 0.
+5. When all are done, gather a summary table (role, people found, shortlisted) and export each
+   shortlist (shortlists skill).
+
+Don't have each sub-agent launch its own search: the launches still reach the user as one prompt,
+but `launch_searches` lets you report every outcome in one place and retry only the failures.
 
 ## Results delivered without an agent (webhooks)
 
