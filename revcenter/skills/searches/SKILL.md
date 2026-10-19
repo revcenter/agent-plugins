@@ -10,21 +10,29 @@ shortlist.
 
 ## 1. Criteria
 
-Read the criteria reference once per session (`get_criteria_reference`, or
-`revcenter reference`). The essentials:
+Let Revcenter draft them, the way the app does: `draft_criteria` with the job description or the
+client's request as written (CLI: `revcenter draft request.txt --project <project_id>`). It reads
+titles and their closest synonyms, the role's own place and radius, years, and requirements as short
+terms. Then change only what the person asks for. Writing criteria from scratch is how searches go
+wrong: on 2026-10-19 hand-written criteria sent a Mount Jackson, VA role as "United States".
 
-- `title_variants`: current job titles, literal (up to 10). The first is the role.
-- `metro`: "City, ST", a state, or a country.
-- Often useful: `years_experience`, `must_have`, `skills_required`, `exclude_titles`,
-  `employers` / `exclude_companies`, and `current_industries` (use `search_industries` /
-  `revcenter industries <word>` for LinkedIn's names). The reference lists the rest.
+Keep them plain:
 
-`must_have` and `exclude_titles` are matched as literal text: short terms like "CPA", never
-sentences.
+- `title_variants`: the role's title and its closest synonyms (5 are sent). Not every adjacent title.
+- `metro`: the role's own place, "City, ST", with `geo_radius_mi` (25-75), or `allowed_metros` for a
+  few named towns. Never a country or a state for a role at a named site. "Open to relocating"
+  doesn't widen it: a profile doesn't say whether someone would move. Search wider only when the
+  person says nationwide, and say so when you show the criteria.
+- `must_have`: only short terms a profile would contain, like "CPA", "CMRP" or "SAP PM". Every
+  requirement sentence ("10+ years leading maintenance teams") goes in `must_have_context`, which
+  is scored, not matched. Revcenter moves sentences there itself and says so in `review.changes`.
+- Leave `keywords` out unless the person asks: they don't narrow who is found.
+- `years_experience`, `current_industries` (names from `search_industries`), `exclude_titles` and
+  `exclude_companies` when the request says so. The reference (`get_criteria_reference`) lists the rest.
 
-Show the user the criteria and the cap: "reserves up to 1,000 credits; unused credits come back".
-Pick a bigger `max_credits` (2500, 5000) for broad roles or many places, a smaller one (500) for a
-quick look; the credits skill says more. Launch only after they agree.
+Show the user the criteria, any `review.warnings`, and the cap: "reserves up to 1,000 credits; unused
+credits come back". Pick a bigger `max_credits` (2500, 5000) for broad roles, a smaller one (500)
+for a quick look. Launch only after they agree.
 
 ## 2. Launch and wait
 
@@ -56,6 +64,10 @@ one finishes. Call `get_capacity` first (CLI: `revcenter capacity`) and tell the
 results will arrive, then `wait_for_search` each one.
 
 ## 3. Report
+
+Read `advice` on the finished search first (`get_search`): it says when the pool was thin (under 75
+people read) or the place was wider than a city. Thin means widen `title_variants` or the radius and
+`expand_search`, or tell the person it's a thin market, before a list goes to a client.
 
 `list_people` with `min_score: 80` (or `revcenter people <search_id> --min-score 80 --pretty`):
 for each person, the score, why they fit (title, place, years, must-haves) and their signals.
@@ -101,8 +113,9 @@ All free. A database-only search has no records. No contact details.
 There's no limit on searches running together, only credits. For several roles (a batch of client
 requests, an inbox triage):
 
-1. Draft every role's criteria and confirm them all with the user in one table (each reserves its
-   own cap, 1,000 credits by default).
+1. Draft every role's criteria with `draft_criteria` (one call per role, side by side), apply the
+   person's own notes, and confirm them all in one table: role, place and radius, titles, terms,
+   and any `review.warnings` (each reserves its own cap, 1,000 credits by default).
 2. Make the projects (`create_project`, one per role).
 3. Launch them all in **one** call, so the user approves once:
    - MCP: `launch_searches` with `launches: [{project_id, criteria, max_credits?}, ...]` (up to 25).
