@@ -27,7 +27,7 @@ Follow **Setup** below; step 4 connects the MCP server to every AI tool on the m
 
 ## Setup
 
-1. **Check.** `revcenter --version` should print 0.5.0 or later, and `revcenter auth status` should
+1. **Check.** `revcenter --version` should print 0.6.0 or later, and `revcenter auth status` should
    succeed. If both do, skip to step 5.
 
 2. **Install or update** (Node.js 20+, no sudo):
@@ -62,12 +62,12 @@ Follow **Setup** below; step 4 connects the MCP server to every AI tool on the m
    whichever are installed. Restart the agent if one was newly added.
 
 5. **Confirm.** Run `revcenter whoami --pretty` and `revcenter usage`, and tell the user their
-   workspace and shortlist credits. Then ask what role they'd like to fill.
+   workspace and credits. Then ask what role they'd like to fill.
 
 ## Working rules
 
-- A new search or an expansion uses 1 shortlist credit: show the criteria and get a yes first.
-  Everything else is free.
+- A new search or an expansion reserves up to its cap in credits (1,000 by default; unused credits
+  come back): show the criteria and the cap and get a yes first. Everything else is free.
 - Several roles: one sub-agent per role, in parallel. There is no limit beyond credits.
 - Exports land in `./revcenter-exports/` as CSVs with full profiles.
 - Out of credits: `revcenter topup` opens checkout.

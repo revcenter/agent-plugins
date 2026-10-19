@@ -18,7 +18,7 @@ Set up the Revcenter plugin by following the steps in https://github.com/revcent
 ```
 
 It installs the CLI, signs you in through your browser (one click to authorize a workspace), connects
-Revcenter to the agent and checks how many shortlist credits you have. Then ask for a role:
+Revcenter to the agent and checks how many credits you have. Then ask for a role:
 
 > Find a Plant Controller near Camden, NJ: CPA, 7+ years. Show me the criteria first.
 
@@ -55,17 +55,18 @@ revcenter setup
 | --- | --- |
 | `revcenter` | What Revcenter does and which skill to use |
 | `setup` | Install, sign in, connect the agent |
-| `searches` | Criteria, launching (1 credit), waiting, parallel searches |
+| `searches` | Criteria, launching (a cap in credits), waiting, parallel searches |
 | `shortlists` | Reading, free re-scoring, edits, CSV exports with full profiles |
 | `candidates` | The workspace's candidate database, browse and export |
-| `credits` | What's left, what costs a credit, buying more from the terminal |
+| `credits` | What's left, how a search is charged, choosing a cap, buying more |
 
 The plugin runs the Revcenter MCP server (`revcenter mcp`) and checks at session start that the
 CLI is installed, recent enough and signed in.
 
 ## Costs
 
-A new search or an expansion uses 1 shortlist credit from your workspace; everything else (reading,
+A new search or an expansion reserves up to its cap in credits (1,000 by default) from your
+workspace, is charged for the profiles it reads, and refunds the rest; everything else (reading,
 re-scoring, editing, exporting) is free. Searches ask before they spend. You need a Revcenter
 workspace with API access; ask your Revcenter contact.
 

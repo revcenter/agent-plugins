@@ -70,5 +70,5 @@ revcenter whoami --pretty
 revcenter usage
 ```
 
-Tell the user which workspace they're connected to and how many shortlist credits it has. Then
+Tell the user which workspace they're connected to and how many credits it has (about 1,000 per standard search). Then
 offer to start: "Tell me a role and a location and I'll draft a search."

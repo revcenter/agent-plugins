@@ -1,6 +1,6 @@
 ---
 name: searches
-description: Run Revcenter candidate searches — draft criteria for a role, launch a search (1 shortlist credit), wait for it, and report who scored 80+. Use for "find me candidates for…", "source a…", "run a search", or several roles at once (one sub-agent per role).
+description: Run Revcenter candidate searches — draft criteria for a role, launch a search (reserves up to 1,000 credits by default), wait for it, and report who scored 80+. Use for "find me candidates for…", "source a…", "run a search", or several roles at once (one sub-agent per role).
 ---
 
 # Searches
@@ -22,14 +22,17 @@ Read the criteria reference once per session (`get_criteria_reference`, or
 `must_have` and `exclude_titles` are matched as literal text: short terms like "CPA", never
 sentences.
 
-Show the user the criteria and say it uses 1 shortlist credit. Launch only after they agree.
+Show the user the criteria and the cap: "reserves up to 1,000 credits; unused credits come back".
+Pick a bigger `max_credits` (2500, 5000) for broad roles or many places, a smaller one (500) for a
+quick look; the credits skill says more. Launch only after they agree.
 
 ## 2. Launch and wait
 
 MCP:
 
 1. `create_project` (or reuse one from `list_projects`).
-2. `launch_search` with `project_id` and `criteria`. It asks the user to confirm the credit; if it
+2. `launch_search` with `project_id`, `criteria` and, if not the default, `max_credits`. It asks the
+   user to confirm the cap; if it
    returns `pending_approval`, show the proposal and call `apply_proposal` once they agree.
 3. `wait_for_search` with the `search_id`. Searches usually take a few minutes.
 
@@ -37,7 +40,7 @@ CLI:
 
 ```bash
 revcenter project create "Controller · Camden, NJ"
-revcenter search <project_id> --criteria criteria.json --wait
+revcenter search <project_id> --criteria criteria.json --max-credits 1000 --wait
 ```
 
 A repeated launch with the same project and criteria returns the first search; it is never charged
@@ -52,7 +55,8 @@ results will arrive, then `wait_for_search` each one.
 
 `list_people` with `min_score: 80` (or `revcenter people <search_id> --min-score 80 --pretty`):
 for each person, the score, why they fit (title, place, years, must-haves) and their signals.
-Offer next steps: refine (shortlists skill), export, or widen with `expand_search` (1 more credit).
+Say what it was charged (`credits_charged` on `get_search`). Offer next steps: refine (shortlists
+skill), export, or widen with `expand_search` (reserves its own `max_credits`, 1,000 by default).
 
 ## Every record a search returned
 
@@ -86,7 +90,7 @@ All free. A database-only search has no records. No contact details.
 ## Several roles at once
 
 There's no limit on searches running together, only credits. For several roles, confirm all the
-criteria with the user first (one credit each), then run one sub-agent per role, each doing steps
+criteria with the user first (each reserves its own cap, 1,000 credits by default), then run one sub-agent per role, each doing steps
 2 and 3 for its role. When all are done, gather a summary table (role, people found, shortlisted)
 and export each shortlist (shortlists skill).
 
@@ -110,7 +114,9 @@ with its own API key. Free; a workspace has up to 10 endpoints.
 
 ## If something stops you
 
-- `shortlist_allocation_exhausted` / `no_active_plan`: out of credits — credits skill.
+- `shortlist_allocation_exhausted`: not enough credits for that cap — a smaller `max_credits`, or
+  the credits skill. `no_active_plan`: credits skill.
+- `invalid_max_credits`: a whole number from 100 to 20,000.
 - `invalid_criteria`: fix the fields it names.
 - `invalid_webhook_url`: the endpoint must be public HTTPS; private and local addresses are refused.
-- `search_unavailable`: offer `database_only: true` (scores people already found; no credit).
+- `search_unavailable`: offer `database_only: true` (scores people already found; no credits).
