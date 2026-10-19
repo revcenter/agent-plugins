@@ -43,6 +43,11 @@ revcenter search <project_id> --criteria criteria.json --wait
 A repeated launch with the same project and criteria returns the first search; it is never charged
 twice. A `429` is retried for you.
 
+Running several searches (one per role, or one per subagent): launch them all; none is refused for
+being busy. Past the platform's limit a search reads `queued` with `queue.eta_seconds` and starts as
+one finishes. Call `get_capacity` first (CLI: `revcenter capacity`) and tell the person roughly when
+results will arrive, then `wait_for_search` each one.
+
 ## 3. Report
 
 `list_people` with `min_score: 80` (or `revcenter people <search_id> --min-score 80 --pretty`):
