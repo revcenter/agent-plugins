@@ -27,7 +27,7 @@ Follow **Setup** below; step 4 connects the MCP server to every AI tool on the m
 
 ## Setup
 
-1. **Check.** `revcenter --version` should print 0.4.0 or later, and `revcenter auth status` should
+1. **Check.** `revcenter --version` should print 0.5.0 or later, and `revcenter auth status` should
    succeed. If both do, skip to step 5.
 
 2. **Install or update** (Node.js 20+, no sudo):
