@@ -35,9 +35,15 @@ What can change: `shortlist_min_score` (50–85), `rubric_weights`, and requirem
 
 ## Export
 
-- `export_shortlist` saves a CSV to `./revcenter-exports/shortlist-<project>.csv` (or `output_path`).
-- `revcenter shortlist <project_id> --csv shortlist.csv`.
+- `export_shortlist` saves a CSV to `./revcenter-exports/shortlist-<project>.csv` (or `output_path`);
+  `format: "jsonl"` saves JSON Lines instead.
+- `revcenter shortlist <project_id> --csv shortlist.csv`, or `--jsonl shortlist.jsonl`.
 
-Each row has the score, fit readings, signals, LinkedIn URL, and the whole profile: about,
-experience history, education, skills, certifications, languages, and the profile as JSON in the
-last column. Tell the user the path and the row count; offer to summarize, filter or reshape it.
+For an AI agent, JSONL is lossless; CSV is for spreadsheets. Read the JSONL when you work the
+people yourself; give the CSV to a person who opens it in Excel or Sheets (it is UTF-8 with a byte
+order mark, so accents and "·" show as written).
+
+Each CSV row has the score, fit readings (each column, and all of them in score_breakdown), why
+they fit, signals, LinkedIn URL, and the whole profile: about, experience history, education,
+skills, certifications, languages, the career as numbered columns (experience 1 to 10 with title,
+company, dates and months; education 1 to 5), and the profile as JSON in the last column. Tell the user the path and the row count; offer to summarize, filter or reshape it.

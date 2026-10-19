@@ -18,7 +18,8 @@ standard search is about 1,000 credits, so a balance of 37,000 is roughly 37 sea
 ## How a search is charged
 
 1. **Cap.** Every `launch_search` and `expand_search` takes `max_credits`: 500, 1000, 2500 or 5000
-   (any whole number from 100 to 20,000; 1,000 if you leave it out). The CLI flag is
+   (any whole number from 250 to 20,000; 1,000 if you leave it out; under 250 is refused with
+   `max_credits_too_low`, since a smaller cap can't buy one page of results and read it). The CLI flag is
    `--max-credits`.
 2. **Reserve.** The cap is held from the balance when the search starts (`credits_reserved` in the
    response). If the balance can't cover it, the launch is refused with

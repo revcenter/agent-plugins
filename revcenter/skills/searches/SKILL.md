@@ -31,9 +31,10 @@ quick look; the credits skill says more. Launch only after they agree.
 MCP:
 
 1. `create_project` (or reuse one from `list_projects`).
-2. `launch_search` with `project_id`, `criteria` and, if not the default, `max_credits`. It asks the
-   user to confirm the cap; if it
-   returns `pending_approval`, show the proposal and call `apply_proposal` once they agree.
+2. `launch_search` with `project_id`, `criteria` and, if not the default, `max_credits` (at least
+   250). It asks the user to Accept or Decline the cap in one sentence; if it returns
+   `pending_approval` (their client can't ask, or they didn't answer in time), show the proposal
+   and call `apply_proposal` once they agree.
 3. `wait_for_search` with the `search_id`. Searches usually take a few minutes.
 
 CLI:
@@ -44,7 +45,10 @@ revcenter search <project_id> --criteria criteria.json --max-credits 1000 --wait
 ```
 
 A repeated launch with the same project and criteria returns the first search; it is never charged
-twice. A `429` is retried for you.
+twice. So if a `launch_search` call times out while the user is answering the prompt, call it again
+with exactly the same arguments: the idempotency key is derived from the request, so you get the
+same search back (no second prompt, nothing more reserved). Don't change the criteria or the cap
+on a retry; that is a new search. A `429` is retried for you.
 
 Running several searches (one per role, or one per subagent): launch them all; none is refused for
 being busy. Past the platform's limit a search reads `queued` with `queue.eta_seconds` and starts as
@@ -71,7 +75,11 @@ raw profiles", "everyone it found" or to work the whole result set themselves, u
   `include_profile: false` / `--no-profile` for a lighter list).
 - `export_search_records` saves them all to `./revcenter-exports/<search_id>-records.csv` (CLI:
   `revcenter records <search_id> --csv records.csv`): one row per record, read profiles as text
-  columns. Tell the user the path and row count.
+  columns and as numbered columns (experience 1 to 10, education 1 to 5, months). Tell the user
+  the path and row count.
+- With `format: "jsonl"` (CLI `--jsonl records.jsonl`) it saves JSON Lines instead: one record per
+  line, the whole profile. For an AI agent, JSONL is lossless; CSV is for spreadsheets. To work the profiles yourself, read the
+  JSONL; hand the CSV to a person.
 
 For a whole project (every search in it, expansions and follow-up passes included), use the project
 records instead of looping over search ids:
@@ -80,7 +88,8 @@ records instead of looping over search ids:
   one record per person across the project's searches, `status` rolled up (scored anywhere beats
   known beats not_read), the best `score`, plus `first_search_id` and `search_ids`.
 - `export_project_records` saves `./revcenter-exports/<project_id>-records.csv` (CLI:
-  `revcenter records --project <project_id> --csv project-records.csv`).
+  `revcenter records --project <project_id> --csv project-records.csv`), or JSON Lines with
+  `format: "jsonl"` (CLI `--jsonl`).
 
 For everyone across the whole workspace, from every project, use the candidate database
 (`list_candidates` / `export_candidates`, CLI `revcenter candidates`; candidates skill).
@@ -116,7 +125,11 @@ with its own API key. Free; a workspace has up to 10 endpoints.
 
 - `shortlist_allocation_exhausted`: not enough credits for that cap — a smaller `max_credits`, or
   the credits skill. `no_active_plan`: credits skill.
-- `invalid_max_credits`: a whole number from 100 to 20,000.
+- `max_credits_too_low`: the cap is under 250, too small to buy one page of results and read it.
+  Use 250 or more (500 for a quick look).
+- `invalid_max_credits`: a whole number from 250 to 20,000.
+- A search that ends with `stop_reason` `cap_too_small` bought nothing and was refunded in full:
+  launch again with a bigger `max_credits`.
 - `invalid_criteria`: fix the fields it names.
 - `invalid_webhook_url`: the endpoint must be public HTTPS; private and local addresses are refused.
 - `search_unavailable`: offer `database_only: true` (scores people already found; no credits).

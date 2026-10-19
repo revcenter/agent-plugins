@@ -21,10 +21,12 @@ Follow `cursor` for more; `total` says how many match.
 ## Export
 
 - `export_candidates` saves `./revcenter-exports/candidates.csv` (or `output_path`), with the same
-  filters.
-- `revcenter candidates --csv candidates.csv`.
+  filters; `format: "jsonl"` saves `candidates.jsonl` instead.
+- `revcenter candidates --csv candidates.csv`, or `revcenter candidates --jsonl candidates.jsonl`.
 
-Up to 5,000 people, every profile field, the profile as JSON last. Free.
+Up to 5,000 people. The CSV has every profile field as text and as numbered columns (experience 1
+to 10, education 1 to 5, total and current-role months), the profile as JSON last; the JSON Lines
+file has one person per line with the whole profile. For an AI agent, JSONL is lossless; CSV is for spreadsheets. Free.
 
 ## Score people you already have
 
