@@ -33,6 +33,7 @@ If the session start note says setup is required, or a call fails with `missing_
 | See, refine, edit or export a shortlist | shortlists |
 | Look through or export everyone found so far | candidates |
 | Know what's left, what something costs, buy more | credits |
+| Get results into their own systems with no agent running (an ATS, a pipeline, a job runner) | searches (webhooks) |
 
 ## Rules that always apply
 

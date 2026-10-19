@@ -90,8 +90,27 @@ criteria with the user first (one credit each), then run one sub-agent per role,
 2 and 3 for its role. When all are done, gather a summary table (role, people found, shortlisted)
 and export each shortlist (shortlists skill).
 
+## Results delivered without an agent (webhooks)
+
+When the user wants results to reach their own system as searches finish (an ATS sync, a pipeline,
+a nightly job), instead of an agent waiting on them, add a webhook endpoint:
+
+- `create_webhook` with their public `https://` URL and the events they want, usually
+  `search.completed` and `shortlist.changed` (or leave events out for all of them). CLI:
+  `revcenter webhooks create <url> --events search.completed,shortlist.changed`.
+- The response carries the signing secret **once**. Tell the user to store it where their endpoint
+  can read it, and don't repeat it afterwards; their endpoint checks each delivery's
+  `Revcenter-Signature` with it (examples at https://docs.revcenter.ai/guides/webhooks).
+- `test_webhook` sends a signed test event and says what their endpoint answered.
+  `list_webhook_deliveries` shows what was sent and why anything failed; `redeliver_webhook` sends
+  one again.
+
+Events carry ids, counts and links, not profiles: their system reads the people through the links
+with its own API key. Free; a workspace has up to 10 endpoints.
+
 ## If something stops you
 
 - `shortlist_allocation_exhausted` / `no_active_plan`: out of credits — credits skill.
 - `invalid_criteria`: fix the fields it names.
+- `invalid_webhook_url`: the endpoint must be public HTTPS; private and local addresses are refused.
 - `search_unavailable`: offer `database_only: true` (scores people already found; no credit).
