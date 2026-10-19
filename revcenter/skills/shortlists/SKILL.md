@@ -13,6 +13,10 @@ plus anyone added by hand.
 - `get_shortlist` / `revcenter shortlist <project_id> --pretty`: everyone on it, best first.
 - `list_people` / `revcenter people <search_id> --min-score 70 --pretty`: everyone a search scored,
   including those just under the bar.
+- `list_search_records` / `revcenter records <search_id>`: everyone the search returned, scored or
+  not (see the searches skill); `export_search_records` for all of them as CSV.
+  `list_project_records` / `export_project_records` (`revcenter records --project <project_id>`) do
+  the same for every search in the project at once.
 
 ## Refine (free)
 

@@ -54,6 +54,35 @@ results will arrive, then `wait_for_search` each one.
 for each person, the score, why they fit (title, place, years, must-haves) and their signals.
 Offer next steps: refine (shortlists skill), export, or widen with `expand_search` (1 more credit).
 
+## Every record a search returned
+
+`list_people` and the shortlist hold only the people a search scored. When the user wants "all the
+raw profiles", "everyone it found" or to work the whole result set themselves, use the records:
+
+- `list_search_records` with the `search_id` (or `revcenter records <search_id>`): one record per
+  person the search returned, in order, each with `status` — `scored` (read and scored here, with
+  its `score`), `known` (already in the workspace from another search, not read again) or
+  `not_read` (listed, never read) — plus name, title, company, location, LinkedIn URL, summary, and
+  the full `profile` for anyone the workspace has read. Page with `cursor` (up to 500 a page;
+  `include_profile: false` / `--no-profile` for a lighter list).
+- `export_search_records` saves them all to `./revcenter-exports/<search_id>-records.csv` (CLI:
+  `revcenter records <search_id> --csv records.csv`): one row per record, read profiles as text
+  columns. Tell the user the path and row count.
+
+For a whole project (every search in it, expansions and follow-up passes included), use the project
+records instead of looping over search ids:
+
+- `list_project_records` with the `project_id` (CLI: `revcenter records --project <project_id>`):
+  one record per person across the project's searches, `status` rolled up (scored anywhere beats
+  known beats not_read), the best `score`, plus `first_search_id` and `search_ids`.
+- `export_project_records` saves `./revcenter-exports/<project_id>-records.csv` (CLI:
+  `revcenter records --project <project_id> --csv project-records.csv`).
+
+For everyone across the whole workspace, from every project, use the candidate database
+(`list_candidates` / `export_candidates`, CLI `revcenter candidates`; candidates skill).
+
+All free. A database-only search has no records. No contact details.
+
 ## Several roles at once
 
 There's no limit on searches running together, only credits. For several roles, confirm all the

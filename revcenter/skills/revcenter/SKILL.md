@@ -12,8 +12,10 @@ reasoning; Revcenter does the searching, scoring and record-keeping.
 Two ways in, same account and same data:
 
 - **MCP tools** (preferred inside a chat): `list_projects`, `launch_search`, `wait_for_search`,
-  `list_people`, `get_shortlist`, `export_shortlist`, `list_candidates`, `export_candidates`,
-  `get_usage`, `create_top_up` and more. `list_actions` lists every tool and its cost.
+  `list_people`, `list_search_records`, `export_search_records`, `list_project_records`,
+  `export_project_records`, `get_shortlist`, `export_shortlist`, `list_candidates`,
+  `export_candidates`, `get_usage`, `create_top_up` and more. `list_actions` lists every tool and
+  its cost.
 - **The `revcenter` CLI**: JSON on stdout, `--pretty` for tables, documented exit codes.
   `revcenter --help` lists every command.
 

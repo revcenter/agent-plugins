@@ -6,7 +6,9 @@ description: Browse and export a Revcenter workspace's candidate database — ev
 # Candidate database
 
 Everyone any of the workspace's searches found, newest first, as the Candidates tab in Revcenter
-shows them. Only this workspace's people.
+shows them. Only this workspace's people. This is the place for "everyone across the workspace";
+for every record one search returned, read or not, use `list_search_records`, and for every
+search in one project at once, `list_project_records` (searches skill).
 
 ## Look
 
