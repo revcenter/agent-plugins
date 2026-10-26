@@ -72,7 +72,7 @@ people read) or the place was wider than a city. Thin means widen `title_variant
 `list_people` with `min_score: 80` (or `revcenter people <search_id> --min-score 80 --pretty`):
 for each person, the score, why they fit (title, place, years, must-haves) and their signals.
 Say what it was charged (`credits_charged` on `get_search`). Offer next steps: refine (shortlists
-skill), export, or widen with `expand_search` (reserves its own `max_credits`, 1,000 by default).
+skill), export, or widen with `expand_search` (reserves its own `max_credits`, by default the workspace's most per search).
 
 ## Every record a search returned
 

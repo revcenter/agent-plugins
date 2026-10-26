@@ -66,7 +66,7 @@ Follow **Setup** below; step 4 connects the MCP server to every AI tool on the m
 
 ## Working rules
 
-- A new search or an expansion reserves up to its cap in credits (1,000 by default; unused credits
+- A new search or an expansion reserves up to its cap in credits (by default the workspace's most per search; unused credits
   come back): show the criteria and the cap and get a yes first. Everything else is free.
 - Several roles: one sub-agent per role, in parallel. There is no limit beyond credits.
 - Exports land in `./revcenter-exports/` as CSVs with full profiles.
