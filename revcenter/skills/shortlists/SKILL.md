@@ -1,6 +1,6 @@
 ---
 name: shortlists
-description: Work with Revcenter shortlists — read who made it, change the cut-off, weights or requirements (free re-scoring), add or remove people, and export the shortlist as CSV with full profiles. Use for "show me the shortlist", "who scored highest", "tighten/loosen it", "remove…", "export…".
+description: Work with Revcenter shortlists — read who made it, change the cut-off or requirements (free re-scoring), add or remove people, and export the shortlist as CSV with full profiles. Use for "show me the shortlist", "who scored highest", "tighten/loosen it", "remove…", "export…".
 ---
 
 # Shortlists
@@ -25,8 +25,9 @@ Preview first, then apply:
 - `preview_scoring` / `revcenter rescore <search_id> … --preview`: before and after counts.
 - `apply_scoring` / `revcenter rescore <search_id> …`.
 
-What can change: `shortlist_min_score` (50–85), `rubric_weights`, and requirements through
-`criteria_patch` (`must_have`, `skills`, exclusions). Titles and places can't: that's a new search.
+What can change: `shortlist_min_score` (50–85) and requirements through `criteria_patch`
+(`must_have`, `skills`, exclusions). Titles and places can't: that's a new search. Scoring weights
+are a workspace setting an admin changes in Settings, Scoring, not per search.
 
 ## Edit
 
