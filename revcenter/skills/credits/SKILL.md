@@ -24,10 +24,12 @@ standard search is about 1,000 credits, so a balance of 37,000 is roughly 37 sea
 2. **Reserve.** The cap is held from the balance when the search starts (`credits_reserved` in the
    response). If the balance can't cover it, the launch is refused with
    `shortlist_allocation_exhausted` and nothing runs.
-3. **Charge.** The search spends credits as it reads profiles and stops at its cap. When it
-   finishes, it is charged what it used, never more than the cap, and the rest comes back.
-   `get_search` / `revcenter status <search_id>` shows `credits_charged` once it has finished
-   (null while it runs).
+3. **Charge.** The search spends credits as it buys results pages and reads profiles, and stops at
+   its cap. On a plan a page (up to 25 people) is 25 credits and a profile read 2; on a trial 50 and 5.
+   Lookups, AI screening, people already in the workspace and cached results are free. When it
+   finishes, it is charged pages × page price + reads × read price, never more than the cap, and the
+   rest comes back. `get_search` / `revcenter status <search_id>` shows `credits_charged` once it has
+   finished (null while it runs) and `credits_breakdown.line`, the arithmetic.
 4. **Refund.** A search that fails, or never starts, gets every credit back. Repeating a launch
    never charges twice.
 
