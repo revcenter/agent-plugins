@@ -84,7 +84,8 @@ raw profiles", "everyone it found" or to work the whole result set themselves, u
   its `score`), `known` (already in the workspace from another search, not read again) or
   `not_read` (listed, never read) — plus name, title, company, location, LinkedIn URL, summary, and
   the full `profile` for anyone the workspace has read. Page with `cursor` (up to 500 a page;
-  `include_profile: false` / `--no-profile` for a lighter list).
+  `fields`, e.g. `experience,education`, for slices; `include_profile: false` / `--no-profile` for
+  a lighter list. A page stops at about 100 KB and gives a `cursor`).
 - `export_search_records` saves them all to `./revcenter-exports/<search_id>-records.csv` (CLI:
   `revcenter records <search_id> --csv records.csv`): one row per record, read profiles as text
   columns and as numbered columns (experience 1 to 10, education 1 to 5, months). Tell the user
