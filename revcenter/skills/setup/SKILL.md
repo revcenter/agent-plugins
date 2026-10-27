@@ -49,7 +49,7 @@ It waits until they authorize (up to 10 minutes) and saves the key. If it ends w
 `access_denied`, they clicked Deny: ask before trying again.
 
 On a machine where the user can't open a browser link (a server), they can instead create a key in
-Revcenter under **Settings → Usage → API** and set it as `REVCENTER_API_KEY` in the agent's
+Revcenter under **Settings → Integrations → API** and set it as `REVCENTER_API_KEY` in the agent's
 environment. Never ask them to paste a key into the chat.
 
 ## 4. Connect this agent (MCP)
