@@ -1,6 +1,6 @@
 ---
 name: searches
-description: Run Revcenter candidate searches — draft criteria for a role, launch a search (reserves up to 1,000 credits by default), wait for it, and report who scored 80+. Use for "find me candidates for…", "source a…", "run a search", or several roles at once (one launch_searches call, then one sub-agent per search).
+description: Run Revcenter candidate searches — draft criteria for a role, launch a search (reserves up to the workspace's limit per search unless you set max_credits), wait for it, and report who scored 80+. Use for "find me candidates for…", "source a…", "run a search", or several roles at once (one launch_searches call, then one sub-agent per search).
 ---
 
 # Searches
@@ -30,9 +30,10 @@ Keep them plain:
 - `years_experience`, `current_industries` (names from `search_industries`), `exclude_titles` and
   `exclude_companies` when the request says so. The reference (`get_criteria_reference`) lists the rest.
 
-Show the user the criteria, any `review.warnings`, and the cap: "reserves up to 1,000 credits; unused
-credits come back". Pick a bigger `max_credits` (2500, 5000) for broad roles, a smaller one (500)
-for a quick look. Launch only after they agree.
+Show the user the criteria, any `review.warnings`, and the cap: "reserves up to N credits; unused
+credits come back", with N the `max_credits` you'll send or, if you send none, the workspace's
+`credit_terms.max_credits_per_search` from `get_usage`. A bigger cap suits broad roles, a smaller one
+(500) a quick look. Launch only after they agree.
 
 ## 2. Launch and wait
 
@@ -59,9 +60,8 @@ same search back (no second prompt, nothing more reserved). Don't change the cri
 on a retry; that is a new search. A `429` is retried for you.
 
 Running several searches (one per role, or one per subagent): launch them all; none is refused for
-being busy. Past the platform's limit a search reads `queued` with `queue.eta_seconds` and starts as
-one finishes. Call `get_capacity` first (CLI: `revcenter capacity`) and tell the person roughly when
-results will arrive, then `wait_for_search` each one.
+being busy. When many run at once a search reads `queued`, with `queue.eta_seconds` saying about when
+it starts; tell the person, then `wait_for_search` each one.
 
 ## 3. Report
 
@@ -116,7 +116,7 @@ requests, an inbox triage):
 
 1. Draft every role's criteria with `draft_criteria` (one call per role, side by side), apply the
    person's own notes, and confirm them all in one table: role, place and radius, titles, terms,
-   and any `review.warnings` (each reserves its own cap, 1,000 credits by default).
+   and any `review.warnings` (each reserves its own cap, by default the workspace's limit per search).
 2. Make the projects (`create_project`, one per role).
 3. Launch them all in **one** call, so the user approves once:
    - MCP: `launch_searches` with `launches: [{project_id, criteria, max_credits?}, ...]` (up to 25).

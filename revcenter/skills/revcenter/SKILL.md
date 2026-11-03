@@ -37,8 +37,8 @@ If the session start note says setup is required, or a call fails with `missing_
 
 ## Rules that always apply
 
-- A new search, or expanding one, reserves up to its cap in **credits** (by default the workspace's most per search), is charged
-  for the results pages (25 credits each on a plan, 50 on a trial) and profile reads (2 on a plan, 5 on a trial) it buys, and refunds the rest. Show the criteria (or the role, place and
+- A new search, or expanding one, reserves up to its cap in **credits** (by default the workspace's limit per search),
+  is charged for the results pages and profile reads it buys (the workspace's prices are in `get_usage` under `credit_terms`), and refunds the rest. Show the criteria (or the role, place and
   must-haves) and the cap, and get a yes before launching. Reading, re-scoring, editing and exporting are free.
 - Never print an API key. The CLI saves it; the MCP server reads it from there.
 - Revcenter's own words for things: projects, searches, shortlists, credits, scores. Don't guess at

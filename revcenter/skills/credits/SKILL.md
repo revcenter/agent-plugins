@@ -5,8 +5,10 @@ description: Revcenter credits — the balance, what a search costs, choosing a 
 
 # Credits
 
-Revcenter meters in **credits**, the same ones the Revcenter app uses (plan plus top-ups). A
-standard search is about 1,000 credits, so a balance of 37,000 is roughly 37 searches.
+Revcenter meters in **credits**, the same ones the Revcenter app uses (plan plus top-ups). The
+workspace's own numbers are in `get_usage` / `revcenter usage` under `credit_terms`: its limit per
+search (`max_credits_per_search`, what a search reserves when it names no cap) and per project, and
+what a results page and a profile read cost. Quote those, never a fixed number.
 
 | Uses credits | Free |
 | --- | --- |
@@ -17,16 +19,16 @@ standard search is about 1,000 credits, so a balance of 37,000 is roughly 37 sea
 
 ## How a search is charged
 
-1. **Cap.** Every `launch_search` and `expand_search` takes `max_credits`: 500, 1000, 2500 or 5000
-   (any whole number from 250 to 20,000; 1,000 if you leave it out; under 250 is refused with
+1. **Cap.** Every `launch_search` and `expand_search` takes `max_credits`, any whole number from 250
+   up to the workspace's limit per search (left out, the search reserves that limit; under 250 is refused with
    `max_credits_too_low`, since a smaller cap can't buy one page of results and read it). The CLI flag is
    `--max-credits`.
 2. **Reserve.** The cap is held from the balance when the search starts (`credits_reserved` in the
    response). If the balance can't cover it, the launch is refused with
    `shortlist_allocation_exhausted` and nothing runs.
 3. **Charge.** The search spends credits as it buys results pages and reads profiles, and stops at
-   its cap. On a plan a page (up to 25 people) is 25 credits and a profile read 2; on a trial 50 and 5.
-   Lookups, AI screening, people already in the workspace and cached results are free. When it
+   its cap, at the workspace's prices (`credit_terms.results_page_credits` and
+   `profile_read_credits`). Lookups, AI screening, people already in the workspace and cached results are free. When it
    finishes, it is charged pages × page price + reads × read price, never more than the cap, and the
    rest comes back. `get_search` / `revcenter status <search_id>` shows `credits_charged` once it has
    finished (null while it runs) and `credits_breakdown.line`, the arithmetic.
@@ -35,12 +37,12 @@ standard search is about 1,000 credits, so a balance of 37,000 is roughly 37 sea
 
 ## Choosing a cap
 
-- 1,000 (the default) suits most single-place roles.
+- Leave `max_credits` out for the workspace's limit per search; that suits most roles.
 - 500 for a quick look at a narrow, well-defined role.
-- 2,500 or 5,000 for broad roles, several places, or when the user wants as many people as
-  possible. A bigger cap only lets the search read more; unused credits come back.
-- Say the cap when you show the user the criteria ("reserves up to 1,000 credits; unused credits
-  come back"), and get their yes before launching.
+- A bigger cap (up to the limit) for broad roles, several places, or as many people as possible. A
+  bigger cap only lets the search read more; unused credits come back.
+- Say the cap when you show the user the criteria ("reserves up to N credits; unused credits come
+  back"), and get their yes before launching.
 
 ## What's left
 
