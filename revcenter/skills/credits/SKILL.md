@@ -5,31 +5,31 @@ description: Revcenter credits — the balance, what a search costs, choosing a 
 
 # Credits
 
-Revcenter meters in **credits**, the same ones the Revcenter app uses (plan plus top-ups). The
-workspace's own numbers are in `get_usage` / `revcenter usage` under `credit_terms`: its limit per
-search (`max_credits_per_search`, what a search reserves when it names no cap) and per project, and
-what a results page and a profile read cost. Quote those, never a fixed number.
+Revcenter meters in **credits**, the same ones the Revcenter app uses (plan plus top-ups). 3 credits
+per profile delivered. People you already have are free. The workspace's own numbers are in
+`get_usage` / `revcenter usage` under `credit_terms`: its limit per search
+(`max_credits_per_search`, what a search reserves when it names no cap) and per project, and
+`credits_per_profile`. Quote those, never a fixed number.
 
 | Uses credits | Free |
 | --- | --- |
 | Launching a search | Reading anything |
 | Expanding a search | Re-scoring, editing shortlists |
-| | Exports, the candidate database |
-| | `database_only` searches |
+| `database_only` searches (3 credits per profile delivered) | Exports, the candidate database |
 
 ## How a search is charged
 
 1. **Cap.** Every `launch_search` and `expand_search` takes `max_credits`, any whole number from 250
    up to the workspace's limit per search (left out, the search reserves that limit; under 250 is refused with
-   `max_credits_too_low`, since a smaller cap can't buy one page of results and read it). The CLI flag is
+   `max_credits_too_low`). The CLI flag is
    `--max-credits`.
 2. **Reserve.** The cap is held from the balance when the search starts (`credits_reserved` in the
    response). If the balance can't cover it, the launch is refused with
    `shortlist_allocation_exhausted` and nothing runs.
-3. **Charge.** The search spends credits as it buys results pages and reads profiles, and stops at
-   its cap, at the workspace's prices (`credit_terms.results_page_credits` and
-   `profile_read_credits`). Lookups, AI screening, people already in the workspace and cached results are free. When it
-   finishes, it is charged pages × page price + reads × read price, never more than the cap, and the
+3. **Charge.** The search spends 3 credits for each profile it delivers
+   (`credit_terms.credits_per_profile`), and stops at its cap. People the workspace already has are
+   free; results pages, lookups and AI screening cost nothing. When few people match, it stops early
+   and says so. When it finishes, it is charged profiles × 3, never more than the cap, and the
    rest comes back. `get_search` / `revcenter status <search_id>` shows `credits_charged` once it has
    finished (null while it runs) and `credits_breakdown.line`, the arithmetic.
 4. **Refund.** A search that fails, or never starts, gets every credit back. Repeating a launch
@@ -40,7 +40,7 @@ what a results page and a profile read cost. Quote those, never a fixed number.
 - Leave `max_credits` out for the workspace's limit per search; that suits most roles.
 - 500 for a quick look at a narrow, well-defined role.
 - A bigger cap (up to the limit) for broad roles, several places, or as many people as possible. A
-  bigger cap only lets the search read more; unused credits come back.
+  bigger cap only lets the search deliver more; unused credits come back.
 - Say the cap when you show the user the criteria ("reserves up to N credits; unused credits come
   back"), and get their yes before launching.
 
@@ -57,8 +57,11 @@ searches finish and give back what they didn't use.
 amount buys at the workspace's plan rate. Nothing is charged until the user pays on that page;
 credits arrive as soon as they do. Confirm the amount with the user before creating the link.
 
-`shortlist_allocation_exhausted`: not enough credits for that cap. Offer a smaller `max_credits`,
-a top-up, or `database_only: true`.
+`shortlist_allocation_exhausted`: not enough credits for that cap. Offer a smaller `max_credits`
+or a top-up. `trial_used_up`: the free trial is used up; the user chooses a plan to keep searching.
+
+`database_pass_needs_credits`: the search has finished and its credits are settled, so a database
+pass can't add people. Offer `expand_search` instead.
 
 `top_up_needs_plan`: the workspace has no plan; send the user to `details.billing_url`
 (Settings → Plan & billing in Revcenter).

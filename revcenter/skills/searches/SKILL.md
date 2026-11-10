@@ -168,4 +168,4 @@ with its own API key. Free; a workspace has up to 10 endpoints.
   launch again with a bigger `max_credits`.
 - `invalid_criteria`: fix the fields it names.
 - `invalid_webhook_url`: the endpoint must be public HTTPS; private and local addresses are refused.
-- `search_unavailable`: offer `database_only: true` (scores people already found; no credits).
+- `search_unavailable`: offer `database_only: true` (buys no new pages; reserves credits like any search).

@@ -30,5 +30,6 @@ file has one person per line with the whole profile. For an AI agent, JSONL is l
 
 ## Score people you already have
 
-To score the workspace's existing candidates against a new role without buying a search, launch
-with `database_only: true` (no credit), or run `run_database_pass` on an existing search.
+To score candidates against a new role without buying new results pages, launch with
+`database_only: true` (it reserves `max_credits`; 3 credits per profile delivered, and people you
+already have are free), or run `run_database_pass` on a search that still holds credits.

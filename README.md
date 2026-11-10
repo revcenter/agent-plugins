@@ -66,7 +66,7 @@ CLI is installed, recent enough and signed in.
 ## Costs
 
 A new search or an expansion reserves up to its cap in credits (by default the workspace's limit per search) from your
-workspace, is charged for the results pages and profile reads it buys (the workspace's prices are in `get_usage` under `credit_terms`), and refunds the rest; everything else (reading,
+workspace, is charged 3 credits per profile delivered (people you already have are free; the workspace's terms are in `get_usage` under `credit_terms`), and refunds the rest; everything else (reading,
 re-scoring, editing, exporting) is free. Searches ask before they spend. You need a Revcenter
 workspace with API access; ask your Revcenter contact.
 
