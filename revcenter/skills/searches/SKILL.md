@@ -161,7 +161,7 @@ with its own API key. Free; a workspace has up to 10 endpoints.
 
 - `shortlist_allocation_exhausted`: not enough credits for that cap — a smaller `max_credits`, or
   the credits skill. `no_active_plan`: credits skill.
-- `max_credits_too_low`: the cap is under 250, too small to buy one page of results and read it.
+- `max_credits_too_low`: the cap is under 250, the smallest cap a search takes.
   Use 250 or more (500 for a quick look).
 - `invalid_max_credits`: a whole number from 250 to 20,000.
 - A search that ends with `stop_reason` `cap_too_small` bought nothing and was refunded in full:
