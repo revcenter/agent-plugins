@@ -35,6 +35,17 @@ per profile delivered. People you already have are free. The workspace's own num
 4. **Refund.** A search that fails, or never starts, gets every credit back. Repeating a launch
    never charges twice.
 
+## Company searches
+
+A search for companies that are hiring is charged per company, for the data the person chose: 2
+credits for each company listed, 5 more for each with hiring signals (leaders who left or joined,
+title moves), 3 more for each with decision makers (up to 6 named people). All three are 10 a
+company; a list that finds any company is charged at least 100. Hiring signals and decision makers
+are charged only for a company where some turned up. Companies already in the workspace's
+results and staffing agencies left out are free. `get_search` shows the spend per action under
+`credits_breakdown.companies` (`found`, `hiring_signals`, `decision_makers`, `list_minimum`) and
+`credits_breakdown.companies.line`, e.g. "Finding 60 · Hiring signals 150 · Decision makers 90".
+
 ## Choosing a cap
 
 - Leave `max_credits` out for the workspace's limit per search; that suits most roles.
